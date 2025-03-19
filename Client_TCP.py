@@ -24,14 +24,14 @@ client_socket.sendall(answer2.encode())
 client_socket.sendall(answer3.encode())
 
 # Rececbendo os resultados do servidor
-#result1 = client_socket.recv(1024).decode()
-#result2 = client_socket.recv(1024).decode()
-#result3 = client_socket.recv(1024).decode()
+result1 = client_socket.recv(1024).decode()
+result2 = client_socket.recv(1024).decode()
+result3 = client_socket.recv(1024).decode()
 
 # Mostrando os resultados do questionário
-#print(result1)
-#print(result2)
-#print(result3)
+print(result1)
+print(result2)
+print(result3)
 
 # Fecha a conexão
 client_socket.close()
