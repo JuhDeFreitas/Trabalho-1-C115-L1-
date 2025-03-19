@@ -1,37 +1,56 @@
 import socket
+import json
 
-HOST = '127.0.0.1'  # Endereço do servidor (localhost)
-PORT = 65432        # Porta do servidor
+HOST = 'localhost'
+PORT = 3000
 
 # Criando o socket TCP
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((HOST, PORT))
+print("Conexão com o servidor estabelecida.")
 
-# Recebe as perguntas do servidor
-question1 = client_socket.recv(1024).decode()
-question2 = client_socket.recv(1024).decode()
-question3 = client_socket.recv(1024).decode()
-print(question1)
-print(question2)
-print(question3)
+# Recebe o numero de questões a ser recebidas do servidor
+number_of_questions = int(client_socket.recv(1024).decode())
+
+question = []
+# Recebe as questões do servidor
+for i in range(number_of_questions):
+    question.append(client_socket.recv(1024).decode())
+
+# Imprime as informações recebidas
+for i in range(number_of_questions):
+    print(question[i])
+
+# Solicita as respostas para cada questão
+response = []
+print("\nInsira abaixo as respostas das quetões: ")
+for i in range(number_of_questions):
+    response.append(input(f"Questão {i}: "))
 
 # Envia as respostas ao servidor
-answer1 = 'b'  # Resposta para a pergunta
-answer2 = "a"  # Resposta para a pergunta
-answer3 = "a"  # Resposta para a pergunta
-client_socket.sendall(answer1.encode())
-client_socket.sendall(answer2.encode())
-client_socket.sendall(answer3.encode())
+client_socket.send(''.join(response).encode())
+print("\nRespostas enviadas ao servidor.")
 
-# Rececbendo os resultados do servidor
-result1 = client_socket.recv(1024).decode()
-result2 = client_socket.recv(1024).decode()
-result3 = client_socket.recv(1024).decode()
+# Recebe o resultado do questionário
+result = json.loads(client_socket.recv(1024).decode())
+print(f"Resultado recebido.")
 
-# Mostrando os resultados do questionário
-print(result1)
-print(result2)
-print(result3)
+#Imprimindo o resultado do questionário
 
-# Fecha a conexão
-client_socket.close()
+correct = 0
+wrong = 0
+
+print("\nResultado do Questionário:")
+for i in range(number_of_questions):
+    if result[i] == True:
+        print(f"Questão {i+1}: Correta ")
+        correct += 1
+    else:
+        print(f"Questão {i+1}: Incorreta ")
+        wrong += 1
+
+print(f"\nAcertos: {correct}")
+print(f"Erros: {wrong}")
+
+nota = (correct / len(result)) * 100
+print("Nota: ", round(nota, 2))
