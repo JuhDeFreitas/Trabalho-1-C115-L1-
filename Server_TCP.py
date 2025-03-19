@@ -34,7 +34,6 @@ print(f"Respostas: {response1, response2, response3}")
 acertos = 0
 erros = 0
 
-''''
 # Realizando a correção das questões
 if response1 == answer[0]:
     result1 = "Questão 1: Correta"
@@ -56,13 +55,13 @@ if response3 == answer[2]:
 else:
     result3 = "Questão 3: Incorreta"
     erros += 1
-    '''
+   
 # Retornando a correção
-#connectionSocket.sendall(result1.encode())
-#connectionSocket.sendall(result2.encode())
-#connectionSocket.sendall(result3.encode())
-#connectionSocket.sendall(acertos.encode())
-#connectionSocket.sendall(erros.encode())
+connectionSocket.sendall(result1.encode())
+connectionSocket.sendall(result2.encode())
+connectionSocket.sendall(result3.encode())
+connectionSocket.sendall(acertos.encode())
+connectionSocket.sendall(erros.encode())
 
 # Fecha a conexão
 connectionSocket.close()
